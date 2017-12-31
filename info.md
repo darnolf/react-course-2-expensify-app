@@ -415,9 +415,101 @@ npm install jest@20.0.4
 ```
 npm install extract-text-webpack-plugin@3.0.0 
 ```
+* Add to `webpack.config.js`
+```
+const CSSExtract = new ExtractTextPlugin('styles.css');
+```
+* Change rules down below:
+```javascript
+module: {
+    rules: [{
+        loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/
+    }, {
+        test: /\.s?css$/,
+        use: CSSExtract.extract({
+            use: [
+                {
+                    loader: 'css-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                },
+                {
+                    loader: 'sass-loader',
+                    options: {
+                        sourceMap: true
+                    }
+                }
+            ] 
+            
+        })
+    }]
+},
+```
 
+## Install EXPRESS production server
 
+* Install NPM package:
+```
+npm install express@4.15.4
+```
+* Create folder `server` at root and file `server.js`
+```javascript
+const path = require('path');
+const express = require('express');
+const app = express();
+const publicPath = path.join(__dirname, '..', 'public')
 
+app.use(express.static(publicPath));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+})
+
+app.listen(3000, () => {
+    console.log('The server is up at http:localhost://3000')
+});
+```
+* Now run the server
+```
+node server/server.js
+```
+* Make sure to run `npm run build:prod` to make sure all production files are in place.
+
+* Fix refresh browser issue, the /create or /help pages don't exist, has to force browser to always redirect to '/', where the client router will provide the contents from components. Here is the fix:
+```javascript
+app.get('*', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+})
+```
+## Setup HEROKU
+
+* User windows installer and check with `heroku --version`
+* Run: `heroku login` add credentials, email pass.
+* Create project: `heroku create reactexpensify101` (Name maybe taken)
+* Check created repository: `git remote -v`: (https://git.heroku.com/reactexpensify101.git)
+
+* Heroku needs a START script defined in `package.json`, we have to tell it where is the node server.
+```
+"start": "node server/server.js"
+```
+* Heroku provided ports are dynamic, so we need to change `server/server.js` to take the provided port or fallback to 3000 (if local)
+```javascript
+const port = process.env.PORT || 3000
+```
+* Teach Heroku how to run Webpack to create the build. Add script to `package.json`
+```
+"heroku-postbuild": "npm run build:prod",
+```
+* Add dev and map files to `.gitignore`
+```
+public/bundle.js
+public/bundle.js.map
+public/styles.js
+public/styles.js.map
+```
 
 ```javascript
 const arr = [1, 2, 3, 4]
