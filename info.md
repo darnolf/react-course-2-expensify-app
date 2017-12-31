@@ -546,15 +546,23 @@ public/dist/
 * Add `/dist/` to css and js file links in "index.html"
 
 ```
-npm run dev-server (works with virtual assets for development)
 npm run build:prod (Creates production build with assets in /dist)
-node server/server.js (Runs express node server, emulates remote)
+npm run dev-server (works with virtual assets for development)
+node server/server.js (Runs express node server on /dist final assets)
+```
+* Once tested on both servers it can ge commited
+```
+git commit -am "Setup dev dependencies and dist folder"
+git push
+git push heroku master
+```
 
+## Install NUMERALJS to format numbers or currencty
 
-
-node server/server.js
-
-
+* Install NPM package:
+```
+npm install numeral@2.0.6
+```
 
 
 
