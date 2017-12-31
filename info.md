@@ -510,6 +510,54 @@ public/bundle.js.map
 public/styles.js
 public/styles.js.map
 ```
+* Now we start adding and pushing to the remote server.
+```
+git add .
+git commit -m "Setup production build and server"
+git push
+git push heroku master
+
+```
+* URL to live app is now provided.
+
+## Deploy General
+
+* Move assets to folder `dist` and setup in package.json
+```javascript
+        output: {
+            path: path.join(__dirname, 'public', 'dist'),
+            filename: 'bundle.js'
+        },
+
+---------------
+
+        devServer: {
+            contentBase: path.join(__dirname, 'public'),
+            historyApiFallback: true,
+            publicPath: '/dist/'
+        }
+```
+
+* Change `.gitignore` accordingly
+```
+node_modules/
+public/dist/
+```
+* Add `/dist/` to css and js file links in "index.html"
+
+```
+npm run dev-server (works with virtual assets for development)
+npm run build:prod (Creates production build with assets in /dist)
+node server/server.js (Runs express node server, emulates remote)
+
+
+
+node server/server.js
+
+
+
+
+
 
 ```javascript
 const arr = [1, 2, 3, 4]
