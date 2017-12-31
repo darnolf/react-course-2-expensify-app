@@ -410,6 +410,12 @@ npm install jest@20.0.4
     },
 ```
 
+## Webpack Separate CSS files for PRODUCTION
+
+```
+npm install extract-text-webpack-plugin@3.0.0 
+```
+
 
 
 
